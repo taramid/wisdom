@@ -1,0 +1,18 @@
+<div{{ attributes }}>
+    <a href="{{ path('app_subject_show', {'id': subject.id}) }}">
+        <div class="subject border-1 border-solid border-green-400 rounded-md p-3 bg-green-200 overflow-hidden">
+            <h3 class="text-xl mb-1 text-green-500 font-semibold">
+                {{ subject.title }}
+            </h3>
+{#            <pre class="mb-1 whitespace-pre-wrap">{{ subject.body }}</pre>#}
+{#            {% if subject.tags %}#}
+{#                <hr class="mt-2 border-green-500">#}
+{#                <pre class="text-green-500">{{ subject.tags }}</pre>#}
+{#            {% endif %}#}
+{#            <div class="-mb-2 text-xs font-mono text-green-500 text-right">#}
+{#                <a href="{{ path('app_subject_show', {'id': subject.id}) }}">{{ subject.id }}</a>#}
+{#            </div>#}
+{#            <a href="{{ path('app_subject_edit', {'id': subject.id}) }}">edit</a>#}
+        </div>
+    </a>
+</div>

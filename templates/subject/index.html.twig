@@ -1,35 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Subject index{% endblock %}
+{% block title %}{{ parent() }}{% endblock %}
 
 {% block body %}
-    <h1>Subject index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for subject in subjects %}
-            <tr>
-                <td>{{ subject.id }}</td>
-                <td>{{ subject.title }}</td>
-                <td>
-                    <a href="{{ path('app_subject_show', {'id': subject.id}) }}">show</a>
-                    <a href="{{ path('app_subject_edit', {'id': subject.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {% if subjects is defined and subjects|length > 0 %}
+        <div class="flex flex-wrap gap-4 sm:gap-6">
+            {% for subject in subjects %}
+                <twig:Subject :subject="subject"/>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-4xl">¯\_(ツ)_/¯</div>
+    {% endif %}
 
     <a href="{{ path('app_subject_new') }}">Create new</a>
 {% endblock %}
