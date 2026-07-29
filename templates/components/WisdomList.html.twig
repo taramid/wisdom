@@ -1,0 +1,11 @@
+<div{{ attributes }}>
+    {% if wisdoms is defined and wisdoms|length > 0 %}
+        <div class="flex flex-col gap-y-4 sm:gap-y-6">
+            {% for wisdom in wisdoms %}
+                <twig:Wisdom :wisdom="wisdom"/>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-4xl">¯\_(ツ)_/¯</div>
+    {% endif %}
+</div>

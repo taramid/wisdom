@@ -10,5 +10,7 @@
 
     <a href="{{ path('app_subject_edit', {'id': subject.id}) }}">edit</a>
 
+    <twig:WisdomList :wisdoms="wisdoms" />
+
     {{ include('subject/_delete_form.html.twig') }}
 {% endblock %}
