@@ -33,9 +33,9 @@ class Subject
         $this->wisdoms = new ArrayCollection();
     }
 
-    public function getId(): Uuid
+    public function getId(): string
     {
-        return $this->id;
+        return $this->id->toBase58();
     }
 
     public function getTitle(): ?string
