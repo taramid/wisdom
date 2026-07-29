@@ -1,5 +1,29 @@
 @import "tailwindcss";
 
-body {
-    @apply bg-sky-300;
+/*@layer base {*/
+/*    body {*/
+/*        @apply bg-sky-400;*/
+/*        @apply bg-slate-50 text-slate-900 antialiased font-sans min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white;*/
+/*        @apply bg-sky-400 text-slate-900 antialiased font-sans min-h-screen flex flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 selection:bg-indigo-500 selection:text-white;*/
+/*        @apply bg-slate-50 text-slate-900 antialiased font-sans min-h-screen flex flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 selection:bg-indigo-500 selection:text-white;*/
+/*    }*/
+/*}*/
+
+
+@layer components {
+    /* Targets any input with type="text", "email", "password", etc. */
+    textarea,
+    select,
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="search"] {
+        @apply w-full max-w-md px-3 py-2 bg-white border border-gray-300 rounded text-sm placeholder-gray-400
+        focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500;
+    }
+
+    td, th {
+        /*@apply px-3 py-2 bg-white border border-gray-300 rounded text-sm placeholder-gray-400*/
+        @apply px-3 py-1
+    }
 }
