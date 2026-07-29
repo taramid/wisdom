@@ -1,34 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Wisdom{% endblock %}
+{% block title %}{{ parent() }} | {{ wisdom.title }}{% endblock %}
 
 {% block body %}
-    <h1>Wisdom</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ wisdom.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ wisdom.title }}</td>
-            </tr>
-            <tr>
-                <th>Body</th>
-                <td>{{ wisdom.body }}</td>
-            </tr>
-            <tr>
-                <th>Tags</th>
-                <td>{{ wisdom.tags }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <twig:Wisdom :wisdom="wisdom" />
 
     <a href="{{ path('app_wisdom_index') }}">back to list</a>
 
-    <a href="{{ path('app_wisdom_edit', {'id': wisdom.id}) }}">edit</a>
+{#    <a href="{{ path('app_wisdom_edit', {'id': wisdom.id}) }}">edit</a>#}
 
-    {{ include('wisdom/_delete_form.html.twig') }}
+{#    {{ include('wisdom/_delete_form.html.twig') }}#}
 {% endblock %}
