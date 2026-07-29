@@ -1,22 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Subject{% endblock %}
+{% block title %}{{ subject.title }}{% endblock %}
 
 {% block body %}
-    <h1>Subject</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ subject.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ subject.title }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <twig:Subject :subject="subject" />
 
     <a href="{{ path('app_subject_index') }}">back to list</a>
 
