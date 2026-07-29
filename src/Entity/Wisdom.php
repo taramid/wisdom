@@ -32,9 +32,9 @@ class Wisdom
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Subject $subject = null;
 
-    public function getId(): Uuid
+    public function getId(): string
     {
-        return $this->id;
+        return $this->id->toBase58();
     }
 
     public function getTitle(): ?string
