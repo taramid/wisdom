@@ -1,0 +1,16 @@
+<div{{ attributes }}>
+    <div class="wisdom border-1 border-solid border-amber-500 rounded-md p-3 bg-amber-200 overflow-hidden">
+        <h3 class="text-xl mb-1 text-amber-500 font-semibold">
+            <a href="{{ path('app_wisdom_show', {'id': wisdom.id}) }}">{{ wisdom.title }}</a>
+        </h3>
+        <pre class="mb-1 whitespace-pre-wrap">{{ wisdom.body }}</pre>
+        {% if wisdom.tags %}
+            <hr class="mt-2 border-amber-500">
+            <pre class="text-amber-500">{{ wisdom.tags }}</pre>
+        {% endif %}
+{#        <div class="-mb-2 text-xs font-mono text-amber-500 text-right">#}
+{#            <a href="{{ path('app_wisdom_show', {'id': wisdom.id}) }}">{{ wisdom.id }}</a>#}
+{#        </div>#}
+{#        <a href="{{ path('app_wisdom_edit', {'id': wisdom.id}) }}">edit</a>#}
+    </div>
+</div>
