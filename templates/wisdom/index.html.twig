@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Wisdom index{% endblock %}
+
+{% block body %}
+    <h1>Wisdom index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Body</th>
+                <th>Tags</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for wisdom in wisdoms %}
+            <tr>
+                <td>{{ wisdom.id }}</td>
+                <td>{{ wisdom.title }}</td>
+                <td>{{ wisdom.body }}</td>
+                <td>{{ wisdom.tags }}</td>
+                <td>
+                    <a href="{{ path('app_wisdom_show', {'id': wisdom.id}) }}">show</a>
+                    <a href="{{ path('app_wisdom_edit', {'id': wisdom.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_wisdom_new') }}">Create new</a>
+{% endblock %}
