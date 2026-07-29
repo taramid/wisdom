@@ -47,6 +47,7 @@ final class SubjectController extends AbstractController
     {
         return $this->render('subject/show.html.twig', [
             'subject' => $subject,
+            'wisdoms' => $subject->getWisdoms()->toArray(),
         ]);
     }
 
