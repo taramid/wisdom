@@ -24,3 +24,8 @@ services:
 
 
     Redis: '@cache.default_redis_provider'
+
+    App\Contract\RandomWisdom\PickerInterface: '@App\Service\RandomWisdom\RedisPicker'
+    App\Contract\RandomWisdom\StorageInterface: '@App\Service\RandomWisdom\RedisPicker'
+#    App\Contract\RandomWisdom\PickerInterface: '@App\Service\RandomWisdom\DumbPicker'
+#    App\Contract\RandomWisdom\StorageInterface: '@App\Service\RandomWisdom\NullStorage'
