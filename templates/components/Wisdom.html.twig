@@ -3,7 +3,7 @@
         <h3 class="text-xl mb-1 text-amber-500 font-semibold">
             <a href="{{ path('app_wisdom_show', {'id': wisdom.id}) }}">{{ wisdom.title }}</a>
         </h3>
-        <pre class="mb-1 whitespace-pre-wrap">{{ wisdom.body }}</pre>
+        <pre class="wisdom-body mb-1 whitespace-pre-wrap">{{ wisdom.body | escape | render_code | render_url }}</pre>
         {% if wisdom.tags %}
             <hr class="mt-2 border-amber-500">
             <pre class="text-amber-500">{{ wisdom.tags }}</pre>
