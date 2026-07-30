@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Contract\RandomWisdom\PickerInterface;
 use App\Entity\Wisdom;
 use App\Form\WisdomType;
 use App\Repository\WisdomRepository;
@@ -44,7 +45,7 @@ final class WisdomController extends AbstractController
     }
 
     #[Route('/random', name: 'app_wisdom_random')]
-    public function random(WisdomRepository $wisdomRepository, RedisPicker $wisdomPicker): Response
+    public function random(WisdomRepository $wisdomRepository, PickerInterface $wisdomPicker): Response
     {
         $randomId = $wisdomPicker->getRandomId();
 
