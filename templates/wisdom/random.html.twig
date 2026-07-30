@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | {{ wisdom.title }}{% endblock %}
+
+{% block body %}
+
+    <twig:Wisdom :wisdom="wisdom" />
+
+{% endblock %}

@@ -42,6 +42,14 @@ final class WisdomController extends AbstractController
         ]);
     }
 
+    #[Route('/random', name: 'app_wisdom_random')]
+    public function random(WisdomRepository $wisdomRepository): Response
+    {
+        return $this->render('wisdom/random.html.twig', [
+            'wisdom' => $wisdomRepository->random(),
+        ]);
+    }
+
     #[Route('/{id}', name: 'app_wisdom_show', methods: ['GET'])]
     public function show(Wisdom $wisdom): Response
     {

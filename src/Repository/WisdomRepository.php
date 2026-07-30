@@ -16,6 +16,20 @@ class WisdomRepository extends ServiceEntityRepository
         parent::__construct($registry, Wisdom::class);
     }
 
+    public function random(): ?Wisdom
+    {
+        $count = $this->count([]);
+        if ($count === 0) {
+            return null;
+        }
+
+        return $this->createQueryBuilder('w')
+            ->setFirstResult(random_int(0, $count - 1))
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     //    /**
     //     * @return Wisdom[] Returns an array of Wisdom objects
     //     */
