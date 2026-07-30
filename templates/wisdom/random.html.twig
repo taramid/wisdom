@@ -1,9 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} | {{ wisdom.title }}{% endblock %}
+{% block title %}{{ parent() }} | {{ wisdom.title ?? '-' }}{% endblock %}
 
 {% block body %}
 
-    <twig:Wisdom :wisdom="wisdom" />
+    {% if wisdom is defined and wisdom %}
+        <twig:Wisdom :wisdom="wisdom" />
+    {% else %}
+        <twig:None />
+    {% endif %}
 
 {% endblock %}
