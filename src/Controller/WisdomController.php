@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Wisdom;
 use App\Form\WisdomType;
 use App\Repository\WisdomRepository;
+use App\Service\RandomWisdom\RedisPicker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,10 +44,12 @@ final class WisdomController extends AbstractController
     }
 
     #[Route('/random', name: 'app_wisdom_random')]
-    public function random(WisdomRepository $wisdomRepository): Response
+    public function random(WisdomRepository $wisdomRepository, RedisPicker $wisdomPicker): Response
     {
+        $randomId = $wisdomPicker->getRandomId();
+
         return $this->render('wisdom/random.html.twig', [
-            'wisdom' => $wisdomRepository->random(),
+            'wisdom' => $randomId ? $wisdomRepository->find($randomId) : null,
         ]);
     }
 

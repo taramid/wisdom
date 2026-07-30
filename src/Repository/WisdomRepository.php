@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Wisdom;
+use Symfony\Component\Uid\Uuid;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,18 +17,21 @@ class WisdomRepository extends ServiceEntityRepository
         parent::__construct($registry, Wisdom::class);
     }
 
-    public function random(): ?Wisdom
+    /**
+     * @return Uuid[]
+     */
+    public function getAllIds(): array
     {
-        $count = $this->count([]);
-        if ($count === 0) {
-            return null;
-        }
-
-        return $this->createQueryBuilder('w')
-            ->setFirstResult(random_int(0, $count - 1))
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
+        return array_map(
+            fn(string $id) => Uuid::fromString($id),
+            array_column(
+                $this->createQueryBuilder('w')
+                    ->select('w.id')
+                    ->getQuery()
+                    ->getArrayResult(),
+                'id'
+            )
+        );
     }
 
     //    /**
