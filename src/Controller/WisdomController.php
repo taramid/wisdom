@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Contract\RandomWisdom\PickerInterface;
 use App\Entity\Wisdom;
 use App\Form\WisdomType;
+use App\Repository\SubjectRepository;
 use App\Repository\WisdomRepository;
 use App\Service\RandomWisdom\RedisPicker;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,9 +26,18 @@ final class WisdomController extends AbstractController
     }
 
     #[Route('/new', name: 'app_wisdom_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, SubjectRepository $subjectRepository): Response
     {
         $wisdom = new Wisdom();
+
+        $subjectId = $request->query->get('subjectId');
+        if ($subjectId) {
+            $subject = $subjectRepository->find($subjectId);
+            if ($subject) {
+                $wisdom->setSubject($subject);
+            }
+        }
+
         $form = $this->createForm(WisdomType::class, $wisdom);
         $form->handleRequest($request);
 
@@ -35,7 +45,7 @@ final class WisdomController extends AbstractController
             $entityManager->persist($wisdom);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_wisdom_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_wisdom_show', ['id' => $wisdom->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('wisdom/new.html.twig', [
@@ -71,7 +81,7 @@ final class WisdomController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_wisdom_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_wisdom_show', ['id' => $wisdom->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('wisdom/edit.html.twig', [

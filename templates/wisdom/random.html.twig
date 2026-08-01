@@ -2,6 +2,10 @@
 
 {% block title %}{{ parent() }} | {{ wisdom.title ?? '-' }}{% endblock %}
 
+{% block header_action %}
+    {% include('partials/_new_wisdom.html.twig') %}
+{% endblock %}
+
 {% block body %}
 
     {% if wisdom is defined and wisdom %}

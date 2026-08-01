@@ -2,15 +2,21 @@
 
 {% block title %}{{ subject.title }}{% endblock %}
 
+{% block header_action %}
+    {% include 'partials/_new_wisdom.html.twig' with {'subject': subject.id} %}
+{% endblock %}
+
 {% block body %}
 
     <twig:Subject :subject="subject" />
 
-    <a href="{{ path('app_subject_index') }}">back to list</a>
+    <div class="flex justify-between my-4 sm:my-6">
 
-    <a href="{{ path('app_subject_edit', {'id': subject.id}) }}">edit</a>
+        <a href="{{ path('app_subject_edit', {'id': subject.id}) }}" class="flex justify-center btn">EDIT</a>
+
+        {{ include('subject/_delete_form.html.twig') }}
+    </div>
 
     <twig:WisdomList :wisdoms="wisdoms" />
 
-    {{ include('subject/_delete_form.html.twig') }}
 {% endblock %}

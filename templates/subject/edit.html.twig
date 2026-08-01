@@ -2,12 +2,14 @@
 
 {% block title %}Edit Subject{% endblock %}
 
+{% block header_action %}
+    {% include('partials/_new_subject.html.twig') %}
+{% endblock %}
+
 {% block body %}
     <h1>Edit Subject</h1>
 
-    {{ include('subject/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('subject/_form.html.twig', {'button_label': 'UPDATE'}) }}
 
-    <a href="{{ path('app_subject_index') }}">back to list</a>
-
-    {{ include('subject/_delete_form.html.twig') }}
+{#    {{ include('subject/_delete_form.html.twig') }}#}
 {% endblock %}

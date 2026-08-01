@@ -2,10 +2,12 @@
 
 {% block title %}New Wisdom{% endblock %}
 
+{% block header_action %}
+    {% include('partials/_new_wisdom.html.twig') %}
+{% endblock %}
+
 {% block body %}
     <h1>Create new Wisdom</h1>
 
     {{ include('wisdom/_form.html.twig') }}
-
-    <a href="{{ path('app_wisdom_index') }}">back to list</a>
 {% endblock %}

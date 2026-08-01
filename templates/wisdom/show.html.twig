@@ -2,13 +2,19 @@
 
 {% block title %}{{ parent() }} | {{ wisdom.title }}{% endblock %}
 
+{% block header_action %}
+    {% include('partials/_new_wisdom.html.twig') %}
+{% endblock %}
+
 {% block body %}
 
     <twig:Wisdom :wisdom="wisdom" />
 
-    <a href="{{ path('app_wisdom_index') }}">back to list</a>
+    <div class="flex justify-between my-4 sm:my-6">
 
-{#    <a href="{{ path('app_wisdom_edit', {'id': wisdom.id}) }}">edit</a>#}
+        <a href="{{ path('app_wisdom_edit', {'id': wisdom.id}) }}" class="flex justify-center btn">EDIT</a>
 
-{#    {{ include('wisdom/_delete_form.html.twig') }}#}
+        {{ include('wisdom/_delete_form.html.twig') }}
+    </div>
+
 {% endblock %}
