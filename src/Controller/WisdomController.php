@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Contract\RandomWisdom\PickerInterface;
 use App\Entity\Wisdom;
 use App\Form\WisdomType;
+use App\Repository\SubjectRepository;
 use App\Repository\WisdomRepository;
 use App\Service\RandomWisdom\RedisPicker;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,9 +26,18 @@ final class WisdomController extends AbstractController
     }
 
     #[Route('/new', name: 'app_wisdom_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, SubjectRepository $subjectRepository): Response
     {
         $wisdom = new Wisdom();
+
+        $subjectId = $request->query->get('subjectId');
+        if ($subjectId) {
+            $subject = $subjectRepository->find($subjectId);
+            if ($subject) {
+                $wisdom->setSubject($subject);
+            }
+        }
+
         $form = $this->createForm(WisdomType::class, $wisdom);
         $form->handleRequest($request);
 

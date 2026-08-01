@@ -2,9 +2,12 @@
 
 {% block title %}{{ parent() }}{% endblock %}
 
+{% block header_action %}
+    {% include('partials/_new_wisdom.html.twig') %}
+{% endblock %}
+
 {% block body %}
 
     <twig:WisdomList :wisdoms="wisdoms" />
 
-    <a href="{{ path('app_wisdom_new') }}">Create new</a>
 {% endblock %}

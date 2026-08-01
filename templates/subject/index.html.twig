@@ -2,6 +2,10 @@
 
 {% block title %}{{ parent() }}{% endblock %}
 
+{% block header_action %}
+    {% include('partials/_new_subject.html.twig') %}
+{% endblock %}
+
 {% block body %}
     {% if subjects is defined and subjects|length > 0 %}
         <div class="flex flex-wrap gap-4 sm:gap-6">
@@ -12,6 +16,4 @@
     {% else %}
         <twig:None />
     {% endif %}
-
-    <a href="{{ path('app_subject_new') }}">Create new</a>
 {% endblock %}

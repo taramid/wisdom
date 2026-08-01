@@ -2,11 +2,13 @@
 
 {% block title %}{{ parent() }} | {{ wisdom.title }}{% endblock %}
 
+{% block header_action %}
+    {% include('partials/_new_wisdom.html.twig') %}
+{% endblock %}
+
 {% block body %}
 
     <twig:Wisdom :wisdom="wisdom" />
-
-    <a href="{{ path('app_wisdom_index') }}">back to list</a>
 
 {#    <a href="{{ path('app_wisdom_edit', {'id': wisdom.id}) }}">edit</a>#}
 
