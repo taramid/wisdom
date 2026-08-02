@@ -36,13 +36,11 @@ class SimpleAuthenticator extends AbstractLoginFormAuthenticator
         return new Passport(
             new UserBadge('creator'),
             new CustomCredentials(
-//                fn(string $password) => hash_equals(trim($this->creatorPassword), trim($password)),
-                fn($password) => hash_equals($this->creatorPassword, (string) $password),
+                fn(string $password) => hash_equals(trim($this->creatorPassword), trim($password)),
                 $submittedPassword
             ),
             [
-                // Якщо CSRF блокує вхід локально через HTTPS/сесії, рядок нижче можна видалити
-//                new CsrfTokenBadge('authenticate', $request->request->getString('_csrf_token')),
+                new CsrfTokenBadge('authenticate', $request->request->getString('_csrf_token')),
             ]
         );
 
