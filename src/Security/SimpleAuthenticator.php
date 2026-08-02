@@ -30,7 +30,6 @@ class SimpleAuthenticator extends AbstractLoginFormAuthenticator
 
     public function authenticate(Request $request): Passport
     {
-        // У Symfony 8.1 краще використовувати getString() замість (string) $request->request->get()
         $submittedPassword = $request->request->getString('password');
 
         return new Passport(
