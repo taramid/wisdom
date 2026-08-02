@@ -14,7 +14,7 @@
 
         <form method="post">
             <label for="password">Пароль:</label>
-            <input type="password" id="password" name="password" autofocus required style="width: 100%; padding: 8px; margin: 10px 0;">
+            <input type="password" id="password" name="password" autofocus required class="mt-2 mb-4">
 
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
