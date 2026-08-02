@@ -4,14 +4,6 @@
     <div class="w-64 sm:w-80 mx-auto mt-16">
         <h2>Вхід у записник</h2>
 
-        {% if error %}
-            <div style="color: red; margin-bottom: 10px;">
-                Невірний код!
-                <br>
-                {{ error.message }}
-            </div>
-        {% endif %}
-
         <form method="post">
             <label for="password">Пароль:</label>
             <input type="password" id="password" name="password" autofocus required class="mt-2 mb-4">
@@ -20,5 +12,15 @@
 
             <button type="submit" style="width: 100%; padding: 10px;">Увійти</button>
         </form>
+
+        {% if error %}
+            <div class="text-red-500 mt-6">
+                Пароль невірний !
+                <hr>
+                <div class="font-mono text-xs mt-1">
+                    {{ error.message }}
+                </div>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
