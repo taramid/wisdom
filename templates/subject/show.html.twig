@@ -10,9 +10,12 @@
 
     <twig:Subject :subject="subject" />
 
-    <a href="{{ path('app_subject_edit', {'id': subject.id}) }}">edit</a>
+    <div class="flex justify-between my-4 sm:my-6">
 
-    {{ include('subject/_delete_form.html.twig') }}
+        <a href="{{ path('app_subject_edit', {'id': subject.id}) }}" class="flex justify-center btn">EDIT</a>
+
+        {{ include('subject/_delete_form.html.twig') }}
+    </div>
 
     <twig:WisdomList :wisdoms="wisdoms" />
 
