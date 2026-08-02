@@ -8,7 +8,7 @@ security:
         users_in_memory:
             memory:
                 users:
-                    admin: { roles: [ 'ROLE_CREATOR' ] }
+                    creator: { roles: [ 'ROLE_CREATOR' ] }
 
     firewalls:
         dev:
@@ -34,8 +34,7 @@ security:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/(wisdom|subject)/?$, roles: PUBLIC_ACCESS }
-        - { path: ^/(wisdom|subject)/(new|edit|delete), roles: ROLE_CREATOR }
-
+        - { path: ^/(wisdom|subject)/(new|.+/(edit|delete)), roles: ROLE_CREATOR }
 when@test:
     security:
         password_hashers:
