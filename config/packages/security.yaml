@@ -5,7 +5,10 @@ security:
 
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        users_in_memory: { memory: null }
+        users_in_memory:
+            memory:
+                users:
+                    admin: { roles: [ 'ROLE_CREATOR' ] }
 
     firewalls:
         dev:
@@ -17,6 +20,8 @@ security:
             provider: users_in_memory
             custom_authenticators:
                 - App\Security\SimpleAuthenticator
+            logout:
+                path: app_logout
 
             # Activate different ways to authenticate:
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -28,6 +33,8 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/(wisdom|subject)/?$, roles: PUBLIC_ACCESS }
+        - { path: ^/(wisdom|subject)/(new|edit|delete), roles: ROLE_CREATOR }
 
 when@test:
     security:
