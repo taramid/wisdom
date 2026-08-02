@@ -81,7 +81,7 @@ final class WisdomController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_wisdom_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_wisdom_show', ['id' => $wisdom->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('wisdom/edit.html.twig', [
