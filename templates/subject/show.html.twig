@@ -8,15 +8,20 @@
 
 {% block body %}
 
-    <twig:Subject :subject="subject" />
+    <div class="flex flex-col gap-y-4 sm:gap-y-6">
 
-    <div class="flex justify-between my-4 sm:my-6">
+        <twig:Subject :subject="subject" />
 
-        <a href="{{ path('app_subject_edit', {'id': subject.id}) }}" class="flex justify-center btn">EDIT</a>
+        {% if is_granted('ROLE_CREATOR') %}
+            <div class="flex justify-between">
 
-        {{ include('subject/_delete_form.html.twig') }}
+                <a href="{{ path('app_subject_edit', {'id': subject.id}) }}" class="flex justify-center btn">EDIT</a>
+
+                {{ include('subject/_delete_form.html.twig') }}
+            </div>
+        {% endif %}
+
+        <twig:WisdomList :wisdoms="wisdoms" />
     </div>
-
-    <twig:WisdomList :wisdoms="wisdoms" />
 
 {% endblock %}

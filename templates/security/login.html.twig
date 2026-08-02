@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="w-64 sm:w-80 mx-auto mt-16">
+        <h2>Вхід у записник</h2>
+
+        <form method="post">
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" autofocus required class="mt-2 mb-4">
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <button type="submit" class="w-full">Увійти</button>
+        </form>
+
+        {% if error %}
+            <div class="text-red-500 mt-6">
+                Пароль невірний !
+                <hr>
+                <div class="font-mono text-xs mt-1">
+                    {{ error.message }}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
