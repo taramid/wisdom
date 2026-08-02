@@ -14,12 +14,17 @@
     /* Targets any input with type="text", "email", "password", etc. */
     textarea,
     select,
+    button,
     input[type="text"],
     input[type="email"],
     input[type="password"],
     input[type="search"] {
         @apply w-full max-w-md px-3 py-2 bg-white border border-gray-300 rounded text-sm placeholder-gray-400
         focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500;
+    }
+
+    button {
+        @apply w-24 h-10 text-gray-500 hover:bg-gray-100 hover:text-gray-800 hover:border-gray-400;
     }
 
     td, th {
