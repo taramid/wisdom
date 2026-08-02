@@ -12,8 +12,7 @@
 
     <div class="flex justify-between my-4 sm:my-6">
 
-        <a href="{{ path('app_wisdom_edit', {'id': wisdom.id}) }}"
-           class="flex w-24 h-10 border border-gray-300 rounded justify-center btn">EDIT</a>
+        <a href="{{ path('app_wisdom_edit', {'id': wisdom.id}) }}" class="flex justify-center btn">EDIT</a>
 
         {{ include('wisdom/_delete_form.html.twig') }}
     </div>
