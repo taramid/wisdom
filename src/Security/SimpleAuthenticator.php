@@ -73,4 +73,9 @@ class SimpleAuthenticator extends AbstractAuthenticator
     //      * For more details, see https://symfony.com/doc/current/security/experimental_authenticators.html#configuring-the-authentication-entry-point
     //      */
     // }
+
+    protected function getLoginUrl(Request $request): string
+    {
+        return $this->urlGenerator->generate('app_login');
+    }
 }
