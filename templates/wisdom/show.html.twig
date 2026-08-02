@@ -10,7 +10,12 @@
 
     <twig:Wisdom :wisdom="wisdom" />
 
-    <a href="{{ path('app_wisdom_edit', {'id': wisdom.id}) }}">edit</a>
+    <div class="flex justify-between my-4 sm:my-6">
 
-    {{ include('wisdom/_delete_form.html.twig') }}
+        <a href="{{ path('app_wisdom_edit', {'id': wisdom.id}) }}"
+           class="flex w-24 h-10 border border-gray-300 rounded justify-center">edit</a>
+
+        {{ include('wisdom/_delete_form.html.twig') }}
+    </div>
+
 {% endblock %}
