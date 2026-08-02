@@ -33,8 +33,7 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/(wisdom|subject)/?$, roles: PUBLIC_ACCESS }
-        - { path: ^/(wisdom|subject)/(new|.+/(edit|delete)), roles: ROLE_CREATOR }
+
 when@test:
     security:
         password_hashers:
