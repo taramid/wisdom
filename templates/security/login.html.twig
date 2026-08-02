@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div style="max-width: 300px; margin: 50px auto;">
+        <h2>Вхід у записник</h2>
+
+        {% if error %}
+            <div style="color: red; margin-bottom: 10px;">
+                Невірний код!
+            </div>
+        {% endif %}
+
+        <form method="post">
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" autofocus required style="width: 100%; padding: 8px; margin: 10px 0;">
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <button type="submit" style="width: 100%; padding: 10px;">Увійти</button>
+        </form>
+    </div>
+{% endblock %}
