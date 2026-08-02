@@ -28,8 +28,8 @@ class SimpleAuthenticator extends AbstractLoginFormAuthenticator
     use TargetPathTrait;
 
     public function __construct(
-        private UrlGeneratorInterface $urlGenerator,
-        #[Autowire('%env(APP_CREATOR_PASSWORD)%')] private string $creatorPassword
+        private readonly UrlGeneratorInterface $urlGenerator,
+        #[Autowire('%env(APP_CREATOR_PASSWORD)%')] private readonly string $creatorPassword
     ) {}
 
     /**
