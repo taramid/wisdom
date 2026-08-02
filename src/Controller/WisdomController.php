@@ -45,7 +45,7 @@ final class WisdomController extends AbstractController
             $entityManager->persist($wisdom);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_wisdom_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_wisdom_show', ['id' => $wisdom->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('wisdom/new.html.twig', [
