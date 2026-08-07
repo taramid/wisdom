@@ -51,11 +51,15 @@ ENV APP_ENV=prod \
 # Копіюємо зібрані залежності та код із Stage 1
 COPY --from=composer_builder /app /app
 
+# 2. Збірка фронтенду (Tailwind CSS + AssetMapper)
+RUN php bin/console tailwind:build --minify && \
+    php bin/console asset-map:compile
+
 # Прогріваємо кеш Symfony
 RUN php bin/console cache:clear && \
     php bin/console cache:warmup
 
-# Налаштовуємо права на папку кешу та логів
-RUN chown -R www-data:www-data /app/var
+# Налаштовуємо права на папку кешу, логи та згенеровані асети
+RUN chown -R www-data:www-data /app/var /app/public
 
 EXPOSE 80 443 443/udp
