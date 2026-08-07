@@ -1,9 +1,30 @@
-# 1. БАЗОВИЙ ОБРАЗ (завантажується 1 раз)
+# =========================================================
+# STAGE 1: Збірка залежностей Composer
+# =========================================================
+FROM composer:2 AS composer_builder
+
+WORKDIR /app
+
+# Копіюємо тільки composer-файли для ефективного кешування шарів Docker
+COPY composer.json composer.lock ./
+
+# Встановлюємо залежності без dev-пакетів та без запуску скриптів
+RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
+
+# Копіюємо весь проєкт та збираємо оптимізований автолоадер
+COPY . .
+RUN composer dump-autoload --optimize --classmap-authoritative --no-dev
+
+
+# =========================================================
+# STAGE 2: Production Runtime (FrankenPHP + PHP 8.4)
+# =========================================================
 FROM dunglas/frankenphp:1-php8.4 AS runtime
 
 WORKDIR /app
 
-# 2. СИСТЕМНІ ЕКСТЕНШЕНИ (закешовані! Не перебудовуються при пуші коду)
+# У FrankenPHP вбудовано скрипт install-php-extensions
+# Додавай потрібні тобі розширення через пробіл (наприклад: pdo_pgsql, pdo_mysql, redis, gd)
 RUN install-php-extensions \
     pdo_pgsql \
     pdo_mysql \
@@ -12,25 +33,30 @@ RUN install-php-extensions \
     opcache \
     apcu
 
-# 3. КОНФІГУРАЦІЯ PHP ТА КОМПОЗЕР (закешовані!)
+# Використовуємо стандартний продакшн-конфіг PHP
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# Додаємо тюнінг OPcache, JIT та APCu під Prod
+RUN echo "opcache.enable=1" >> $PHP_INI_DIR/conf.d/00-prod.ini && \
+    echo "opcache.memory_consumption=256" >> $PHP_INI_DIR/conf.d/00-prod.ini && \
+    echo "opcache.max_accelerated_files=20000" >> $PHP_INI_DIR/conf.d/00-prod.ini && \
+    echo "opcache.jit=tracing" >> $PHP_INI_DIR/conf.d/00-prod.ini && \
+    echo "opcache.jit_buffer_size=100M" >> $PHP_INI_DIR/conf.d/00-prod.ini && \
+    echo "apc.enable_cli=1" >> $PHP_INI_DIR/conf.d/00-prod.ini
+
+# Передаємо змінні середовища для Prod та вказуємо FrankenPHP публічну папку
 ENV APP_ENV=prod \
     APP_DEBUG=0 \
     FRANKENPHP_CONFIG="web_path /app/public"
 
-# 4. ВЕНДОРИ / COMPOSER (закешовані! Перебудовуються ТІЛЬКИ якщо змінився composer.lock)
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
+# Копіюємо зібрані залежності та код із Stage 1
+COPY --from=composer_builder /app /app
 
-# 5. ТВІЙ КОД ПРОЄКТУ (ось ця частина і все нижче виконується за 3 секунди при кожному пуші)
-COPY . .
+# Прогріваємо кеш Symfony
+RUN php bin/console cache:clear && \
+    php bin/console cache:warmup
 
-# 6. ФІНАЛЬНІ СКРИПТИ
-RUN composer dump-autoload --optimize --classmap-authoritative --no-dev && \
-    php bin/console cache:clear && \
-    php bin/console cache:warmup && \
-    chown -R www-data:www-data /app/var
+# Налаштовуємо права на папку кешу та логів
+RUN chown -R www-data:www-data /app/var
 
-EXPOSE 80 443
+EXPOSE 80 443 443/udp
