@@ -1,0 +1,9 @@
+.git
+.github
+.idea
+var/
+vendor/
+tests/
+docker-compose*.yml
+.env*.local
+README.md
