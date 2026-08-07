@@ -27,9 +27,7 @@ WORKDIR /app
 # Додавай потрібні тобі розширення через пробіл (наприклад: pdo_pgsql, pdo_mysql, redis, gd)
 RUN install-php-extensions \
     pdo_pgsql \
-    pdo_mysql \
     intl \
-    zip \
     opcache \
     apcu
 
