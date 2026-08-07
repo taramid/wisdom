@@ -23,6 +23,12 @@ FROM dunglas/frankenphp:1-php8.4 AS runtime
 
 WORKDIR /app
 
+# Системні утиліти (curl та сертифікати потрібні Tailwind та ImportMap для завантаження пакетів)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
 # У FrankenPHP вбудовано скрипт install-php-extensions
 # Додавай потрібні тобі розширення через пробіл (наприклад: pdo_pgsql, pdo_mysql, redis, gd)
 RUN install-php-extensions \
@@ -55,12 +61,19 @@ ENV APP_ENV=prod \
 # Копіюємо зібрані залежності та код із Stage 1
 COPY --from=composer_builder /app /app
 
-# 2. Збірка фронтенду (Tailwind CSS + AssetMapper)
+# Створюємо потрібні директорії для асетів та кешу і виставляємо базові права
+RUN mkdir -p /app/var /app/public/assets /app/assets/vendor && \
+    chown -R www-data:www-data /app/var /app/public /app/assets/vendor
+
+# Збірка фронтенду (Tailwind CSS + AssetMapper)
 #RUN php bin/console tailwind:build --minify && \
 #    php bin/console asset-map:compile
 
-RUN php bin/console tailwind:build --minify -v
-RUN php bin/console asset-map:compile -v
+# Збірка фронтенду (ImportMap + Tailwind CSS + AssetMapper)
+# Крок importmap:install гарантує наявність vendor JS-пакетів, якщо вони в .gitignore
+RUN php bin/console importmap:install -vvv
+RUN php bin/console tailwind:build --minify -vvv
+RUN php bin/console asset-map:compile -vvv
 
 # Прогріваємо кеш Symfony
 RUN php bin/console cache:clear && \
