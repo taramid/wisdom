@@ -56,8 +56,11 @@ ENV APP_ENV=prod \
 COPY --from=composer_builder /app /app
 
 # 2. Збірка фронтенду (Tailwind CSS + AssetMapper)
-RUN php bin/console tailwind:build --minify && \
-    php bin/console asset-map:compile
+#RUN php bin/console tailwind:build --minify && \
+#    php bin/console asset-map:compile
+
+RUN php bin/console tailwind:build --minify -v
+RUN php bin/console asset-map:compile -v
 
 # Прогріваємо кеш Symfony
 RUN php bin/console cache:clear && \
