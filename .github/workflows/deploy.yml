@@ -3,7 +3,7 @@ name: Build and Push Docker Image
 on:
     push:
         branches:
-            - master
+            - deploy
 
 # Автоматично даємо права для завантаження в GHCR без створення ручних токенів
 permissions:
