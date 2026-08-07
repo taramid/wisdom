@@ -46,6 +46,10 @@ RUN echo "opcache.enable=1" >> $PHP_INI_DIR/conf.d/00-prod.ini && \
 # Передаємо змінні середовища для Prod та вказуємо FrankenPHP публічну папку
 ENV APP_ENV=prod \
     APP_DEBUG=0 \
+    APP_SECRET=build_time_dummy_secret_32_bytes_long \
+    DATABASE_URL="postgresql://dummy:dummy@127.0.0.1:5432/dummy?serverVersion=16&charset=utf8" \
+    REDIS_URL="redis://127.0.0.1:6379" \
+    MESSENGER_TRANSPORT_DSN="doctrine://default" \
     FRANKENPHP_CONFIG="web_path /app/public"
 
 # Копіюємо зібрані залежності та код із Stage 1
