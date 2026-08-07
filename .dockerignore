@@ -1,9 +1,40 @@
+# Git
 .git
+.gitignore
 .github
+
+# IDE & системні файли
 .idea
-var/
+.vscode
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Локальні залежності (Composer встановить їх сам всередині Docker)
 vendor/
-tests/
-docker-compose*.yml
+node_modules/
+
+# Динамічні файли Symfony, кеш та згенеровані асети
+var/
+public/bundles/
+public/assets/
+
+# Секрети та локальні оточення (КРИТИЧНО для безпеки!)
 .env*.local
+.env.test
+*.key
+*.pem
+
+# Конфігурації Docker (щоб не копіювати їх самі в себе)
+Dockerfile*
+docker-compose*.yml
+
+# Тести, документація та аналізатори коду
+tests/
+phpunit.xml*
+phpcs.xml*
+phpstan.neon*
 README.md
+CHANGELOG.md
+docs/
