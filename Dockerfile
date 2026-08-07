@@ -9,7 +9,7 @@ WORKDIR /app
 COPY composer.json composer.lock ./
 
 # Встановлюємо залежності без dev-пакетів та без запуску скриптів
-RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
+RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --ignore-platform-reqs
 
 # Копіюємо весь проєкт та збираємо оптимізований автолоадер
 COPY . .
