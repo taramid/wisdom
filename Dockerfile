@@ -56,7 +56,7 @@ ENV APP_ENV=prod \
     DATABASE_URL="postgresql://dummy:dummy@127.0.0.1:5432/dummy?serverVersion=16&charset=utf8" \
     REDIS_URL="redis://127.0.0.1:6379" \
     MESSENGER_TRANSPORT_DSN="doctrine://default" \
-    FRANKENPHP_CONFIG="web_path /app/public"
+    FRANKENPHP_CONFIG="worker /app/public/index.php"
 
 # Копіюємо зібрані залежності та код із Stage 1
 COPY --from=composer_builder /app /app
