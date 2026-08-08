@@ -83,3 +83,13 @@ RUN php bin/console cache:clear && \
 RUN chown -R www-data:www-data /app/var /app/public
 
 EXPOSE 80 443 443/udp
+
+# ---------------------------------------------------------
+# ENTRYPOINT (Міграції прямо з Dockerfile)
+# ---------------------------------------------------------
+RUN printf '#!/bin/sh\nset -e\necho "Running database migrations..."\nphp bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration\nexec "$@"\n' > /usr/local/bin/docker-entrypoint && \
+    chmod +x /usr/local/bin/docker-entrypoint
+
+
+ENTRYPOINT ["docker-entrypoint"]
+CMD ["frankenphp", "run", "--config", "/etc/frankenphp/Caddyfile"]
