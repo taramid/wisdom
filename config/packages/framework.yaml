@@ -8,8 +8,11 @@ framework:
     #esi: true
     #fragments: true
 
-    trusted_proxies: '127.0.0.1,REMOTE_ADDR'
-    trusted_headers: ['x-forwarded-for', 'x-forwarded-proto', 'x-forwarded-host']
+    trusted_proxies: '%env(TRUSTED_PROXIES)%'
+    trusted_headers:
+        - 'x-forwarded-for'
+        - 'x-forwarded-proto'
+        - 'x-forwarded-host'
 
 when@test:
     framework:
