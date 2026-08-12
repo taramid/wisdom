@@ -72,8 +72,14 @@ COPY --from=builder /app/src /app/src
 # 2. Зібрані залежності та автолоадер
 COPY --from=builder /app/vendor /app/vendor
 
-# 3. Згенерований системний кеш
-COPY --from=builder /app/var /app/var
+## 3. Згенерований системний кеш
+#COPY --from=builder /app/var /app/var
+
+# 3.1 ЗАБИРАЄМО ЛИШЕ КЕШ (без бінарника tailwind, який лежить у var/tailwind)
+COPY --from=builder /app/var/cache/prod /app/var/cache/prod
+
+# 3.2 Створюємо чисту пусту папку для логів, якщо вона потрібна
+RUN mkdir -p /app/var/log
 
 # 4. Файли проєкту (якщо потрібні)
 COPY --from=builder /app/composer.json /app/
@@ -83,5 +89,4 @@ RUN chown -R www-data:www-data /app/var /app/public
 
 EXPOSE 80 443 443/udp
 
-CMD ["frankenphp", "run", "--config", "/etc/frankenphp/Caddyfile"]
-
+CMD ["frankenphp", "run", "--config", `/etc/frankenphp/Caddyfile`]
