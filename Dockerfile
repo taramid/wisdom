@@ -1,95 +1,73 @@
 # =========================================================
-# STAGE 1: Збірка залежностей Composer
+# STAGE 1: Builder (Збірка залежностей, асетів та кешу)
 # =========================================================
-FROM composer:2 AS composer_builder
+FROM dunglas/frankenphp:1-php8.4 AS builder
 
 WORKDIR /app
 
-# Копіюємо тільки composer-файли для ефективного кешування шарів Docker
-COPY composer.json composer.lock ./
+# Ставимо утиліти, необхідні для завантаження пакетів та роботи Composer
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl ca-certificates git unzip \
+    && rm -rf /var/lib/apt/lists/*
 
-# Встановлюємо залежності без dev-пакетів та без запуску скриптів
+# Встановлюємо Composer та базові розширення для компіляції Symfony
+# БД тут не потрібна, тому pdo_pgsql не ставимо!
+RUN install-php-extensions intl @composer
+
+# 1. Завантажуємо залежності Composer (оптимізація кешу Docker)
+COPY composer.json composer.lock ./
 RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --ignore-platform-reqs
 
-# Копіюємо весь проєкт та збираємо оптимізований автолоадер
+# 2. Копіюємо весь код проєкту
 COPY . .
+
+# 3. Генеруємо оптимізований автолоадер
 RUN composer dump-autoload --optimize --classmap-authoritative --no-dev
+
+# 4. Збираємо фронтенд
+# Фейкові змінні потрібні, щоб Symfony Kernel зміг запуститися для консольних команд
+ENV APP_ENV=prod APP_DEBUG=0 APP_SECRET=build_time_dummy_secret
+RUN php bin/console importmap:install -vvv && \
+    php bin/console tailwind:build --minify -vvv && \
+    php bin/console asset-map:compile -vvv
+
+# 5. Прогріваємо кеш для продакшену
+RUN php bin/console cache:clear && \
+    php bin/console cache:warmup
 
 
 # =========================================================
-# STAGE 2: Production Runtime (FrankenPHP + PHP 8.4)
+# STAGE 2: Production Runtime (Фінальний легкий імедж)
 # =========================================================
 FROM dunglas/frankenphp:1-php8.4 AS runtime
 
 WORKDIR /app
 
-# Системні утиліти (curl та сертифікати потрібні Tailwind та ImportMap для завантаження пакетів)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+# Встановлюємо ТІЛЬКИ ті розширення, що потрібні для роботи з базою та кешем
+RUN install-php-extensions pdo_pgsql intl redis opcache apcu
 
-# У FrankenPHP вбудовано скрипт install-php-extensions
-# Додавай потрібні тобі розширення через пробіл (наприклад: pdo_pgsql, pdo_mysql, redis, gd)
-RUN install-php-extensions \
-    pdo_pgsql \
-    intl \
-    redis \
-    opcache \
-    apcu
+# Налаштовуємо php.ini та агресивний OPcache під продакшн
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" && \
+    { \
+        echo 'opcache.enable=1'; \
+        echo 'opcache.memory_consumption=256'; \
+        echo 'opcache.max_accelerated_files=20000'; \
+        echo 'opcache.jit=tracing'; \
+        echo 'opcache.jit_buffer_size=100M'; \
+        echo 'apc.enable_cli=1'; \
+    } > $PHP_INI_DIR/conf.d/00-prod.ini
 
-# Використовуємо стандартний продакшн-конфіг PHP
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-
-# Додаємо тюнінг OPcache, JIT та APCu під Prod
-RUN echo "opcache.enable=1" >> $PHP_INI_DIR/conf.d/00-prod.ini && \
-    echo "opcache.memory_consumption=256" >> $PHP_INI_DIR/conf.d/00-prod.ini && \
-    echo "opcache.max_accelerated_files=20000" >> $PHP_INI_DIR/conf.d/00-prod.ini && \
-    echo "opcache.jit=tracing" >> $PHP_INI_DIR/conf.d/00-prod.ini && \
-    echo "opcache.jit_buffer_size=100M" >> $PHP_INI_DIR/conf.d/00-prod.ini && \
-    echo "apc.enable_cli=1" >> $PHP_INI_DIR/conf.d/00-prod.ini
-
-# Передаємо змінні середовища для Prod та вказуємо FrankenPHP публічну папку
+# Базові змінні середовища для FrankenPHP (секрети та доступи до БД передасиш на сервері)
 ENV APP_ENV=prod \
     APP_DEBUG=0 \
-    APP_SECRET=build_time_dummy_secret_32_bytes_long \
-    DATABASE_URL="postgresql://dummy:dummy@127.0.0.1:5432/dummy?serverVersion=16&charset=utf8" \
-    REDIS_URL="redis://127.0.0.1:6379" \
-    MESSENGER_TRANSPORT_DSN="doctrine://default" \
     FRANKENPHP_CONFIG="worker /app/public/index.php"
 
-# Копіюємо зібрані залежності та код із Stage 1
-COPY --from=composer_builder /app /app
+# КОПІЮЄМО ВСЕ ЗІБРАНЕ з першого стейджу
+COPY --from=builder /app /app
 
-# Створюємо потрібні директорії для асетів та кешу і виставляємо базові права
-RUN mkdir -p /app/var /app/public/assets /app/assets/vendor && \
-    chown -R www-data:www-data /app/var /app/public /app/assets/vendor
-
-# Збірка фронтенду (Tailwind CSS + AssetMapper)
-#RUN php bin/console tailwind:build --minify && \
-#    php bin/console asset-map:compile
-
-# Збірка фронтенду (ImportMap + Tailwind CSS + AssetMapper)
-# Крок importmap:install гарантує наявність vendor JS-пакетів, якщо вони в .gitignore
-RUN php bin/console importmap:install -vvv
-RUN php bin/console tailwind:build --minify -vvv
-RUN php bin/console asset-map:compile -vvv
-
-# Прогріваємо кеш Symfony
-RUN php bin/console cache:clear && \
-    php bin/console cache:warmup
-
-# Налаштовуємо права на папку кешу, логи та згенеровані асети
+# Виставляємо правильні права на папки, які Symfony буде змінювати під час роботи
 RUN chown -R www-data:www-data /app/var /app/public
 
 EXPOSE 80 443 443/udp
 
-# ---------------------------------------------------------
-# ENTRYPOINT (Міграції прямо з Dockerfile)
-# ---------------------------------------------------------
-RUN printf '#!/bin/sh\nset -e\necho "Running database migrations..."\nphp bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration\nexec "$@"\n' > /usr/local/bin/docker-entrypoint && \
-    chmod +x /usr/local/bin/docker-entrypoint
-
-
-ENTRYPOINT ["docker-entrypoint"]
 CMD ["frankenphp", "run", "--config", "/etc/frankenphp/Caddyfile"]
