@@ -70,21 +70,13 @@ COPY --from=builder /app/migrations /app/migrations
 COPY --from=builder /app/public /app/public
 COPY --from=builder /app/src /app/src
 COPY --from=builder /app/templates /app/templates
-
-# 2. Зібрані залежності та автолоадер
-COPY --from=builder /app/vendor /app/vendor
-
-## 3. Згенерований системний кеш
-#COPY --from=builder /app/var /app/var
-
 # 3.1 ЗАБИРАЄМО ЛИШЕ КЕШ (без бінарника tailwind, який лежить у var/tailwind)
 COPY --from=builder /app/var/cache/prod /app/var/cache/prod
+COPY --from=builder /app/vendor /app/vendor
+COPY --from=builder /app/composer.json /app/
 
 # 3.2 Створюємо чисту пусту папку для логів, якщо вона потрібна
 RUN mkdir -p /app/var/log
-
-# 4. Файли проєкту (якщо потрібні)
-COPY --from=builder /app/composer.json /app/
 
 RUN touch /app/.env
 
