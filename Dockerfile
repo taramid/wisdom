@@ -71,6 +71,7 @@ COPY --from=builder /app/bin /app/bin
 COPY --from=builder /app/config /app/config
 COPY --from=builder /app/public /app/public
 COPY --from=builder /app/src /app/src
+COPY --from=builder /app/templates /app/templates
 
 # 2. Зібрані залежності та автолоадер
 COPY --from=builder /app/vendor /app/vendor
