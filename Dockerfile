@@ -31,6 +31,9 @@ RUN php bin/console importmap:install -vvv && \
     php bin/console tailwind:build --minify -vvv && \
     php bin/console asset-map:compile -vvv
 
+# 4.1 Генеруємо оптимізований файл середовища
+RUN composer dump-env prod
+
 # 5. Прогріваємо кеш для продакшену
 RUN php bin/console cache:clear && \
     php bin/console cache:warmup
@@ -80,9 +83,6 @@ COPY --from=builder /app/var/cache/prod /app/var/cache/prod
 
 # 3.2 Створюємо чисту пусту папку для логів, якщо вона потрібна
 RUN mkdir -p /app/var/log
-
-# 3.3
-RUN composer dump-env prod
 
 # 4. Файли проєкту (якщо потрібні)
 COPY --from=builder /app/composer.json /app/
