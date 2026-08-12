@@ -81,6 +81,9 @@ COPY --from=builder /app/var/cache/prod /app/var/cache/prod
 # 3.2 Створюємо чисту пусту папку для логів, якщо вона потрібна
 RUN mkdir -p /app/var/log
 
+# 3.3
+RUN composer dump-env prod
+
 # 4. Файли проєкту (якщо потрібні)
 COPY --from=builder /app/composer.json /app/
 
