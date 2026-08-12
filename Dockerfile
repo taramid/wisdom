@@ -37,7 +37,7 @@ RUN php bin/console cache:clear && \
 
 
 # =========================================================
-# STAGE 2: Production Runtime (Фінальний легкий імедж)
+# STAGE 2: Clean Production Runtime (Хірургічне копіювання)
 # =========================================================
 FROM dunglas/frankenphp:1-php8.4 AS runtime
 
@@ -62,10 +62,23 @@ ENV APP_ENV=prod \
     APP_DEBUG=0 \
     FRANKENPHP_CONFIG="worker /app/public/index.php"
 
-# КОПІЮЄМО ВСЕ ЗІБРАНЕ з першого стейджу
-COPY --from=builder /app /app
+# ЗАБИРАЄМО ЛИШЕ ПОТРІБНЕ (жодного сміття чи бінарників збірки):
+# 1. Основний код та конфіги
+COPY --from=builder /app/bin /app/bin
+COPY --from=builder /app/config /app/config
+COPY --from=builder /app/public /app/public
+COPY --from=builder /app/src /app/src
 
-# Виставляємо правильні права на папки, які Symfony буде змінювати під час роботи
+# 2. Зібрані залежності та автолоадер
+COPY --from=builder /app/vendor /app/vendor
+
+# 3. Згенерований системний кеш
+COPY --from=builder /app/var /app/var
+
+# 4. Файли проєкту (якщо потрібні)
+COPY --from=builder /app/composer.json /app/
+
+# Права
 RUN chown -R www-data:www-data /app/var /app/public
 
 EXPOSE 80 443 443/udp
