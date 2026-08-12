@@ -3,7 +3,7 @@ name: Build and Push Docker Image
 on:
     push:
         branches:
-            - deploy
+            - deploy2
     workflow_dispatch: # Дозволяє тиснути кнопку "Run workflow" в UI GitHub
 
 # Автоматично даємо права для завантаження в GHCR без створення ручних токенів
