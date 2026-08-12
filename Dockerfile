@@ -11,7 +11,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Встановлюємо Composer та базові розширення для компіляції Symfony
-# БД тут не потрібна, тому pdo_pgsql не ставимо!
 RUN install-php-extensions intl redis @composer
 
 # 1. Завантажуємо залежності Composer (оптимізація кешу Docker)
