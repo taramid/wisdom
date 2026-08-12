@@ -31,9 +31,6 @@ RUN php bin/console importmap:install -vvv && \
     php bin/console tailwind:build --minify -vvv && \
     php bin/console asset-map:compile -vvv
 
-## 4.1 Генеруємо оптимізований файл середовища
-#RUN composer dump-env prod
-
 # 5. Прогріваємо кеш для продакшену
 RUN php bin/console cache:clear && \
     php bin/console cache:warmup
@@ -72,6 +69,7 @@ COPY --from=builder /app/config /app/config
 COPY --from=builder /app/public /app/public
 COPY --from=builder /app/src /app/src
 COPY --from=builder /app/templates /app/templates
+COPY --from=builder /app/migrations /app/migrations
 
 # 2. Зібрані залежності та автолоадер
 COPY --from=builder /app/vendor /app/vendor
@@ -94,5 +92,14 @@ RUN touch /app/.env
 RUN chown -R www-data:www-data /app/var /app/public
 
 EXPOSE 80 443 443/udp
+
+# ---------------------------------------------------------
+# ENTRYPOINT (Міграції прямо з Dockerfile)
+# ---------------------------------------------------------
+RUN printf '#!/bin/sh\nset -e\necho "Running database migrations..."\nphp bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration\nexec "$@"\n' > /usr/local/bin/docker-entrypoint && \
+    chmod +x /usr/local/bin/docker-entrypoint
+
+ENTRYPOINT ["docker-entrypoint"]
+
 
 CMD ["frankenphp", "run", "--config", "/etc/frankenphp/Caddyfile"]
