@@ -71,3 +71,4 @@ RUN chown -R www-data:www-data /app/var /app/public
 EXPOSE 80 443 443/udp
 
 CMD ["frankenphp", "run", "--config", "/etc/frankenphp/Caddyfile"]
+
