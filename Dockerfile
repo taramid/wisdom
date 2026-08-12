@@ -66,10 +66,10 @@ ENV APP_ENV=prod \
 # 1. Основний код та конфіги
 COPY --from=builder /app/bin /app/bin
 COPY --from=builder /app/config /app/config
+COPY --from=builder /app/migrations /app/migrations
 COPY --from=builder /app/public /app/public
 COPY --from=builder /app/src /app/src
 COPY --from=builder /app/templates /app/templates
-COPY --from=builder /app/migrations /app/migrations
 
 # 2. Зібрані залежності та автолоадер
 COPY --from=builder /app/vendor /app/vendor
