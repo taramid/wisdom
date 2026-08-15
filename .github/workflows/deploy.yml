@@ -3,7 +3,7 @@ name: Build and Push Docker Image
 on:
     push:
         branches:
-            - deploy2
+            - '**'
     workflow_dispatch: # Дозволяє тиснути кнопку "Run workflow" в UI GitHub
 
 # Скасовує попередню збірку, якщо в цю ж гілку прийшов новий пуш
@@ -36,14 +36,17 @@ jobs:
                   username: ${{ github.actor }}
                   password: ${{ secrets.GITHUB_TOKEN }} # Токен створюється автоматично сам
 
-            # Генерація тегів (latest + короткий хеш коміту) та автоматичне приведення назви до нижнього регістру
+            # Динамічна генерація тегів та автоматичне приведення назви до нижнього регістру
+            # master => :latest
+            # * => :*
             - name: Extract metadata (tags, labels) for Docker
               id: meta
               uses: docker/metadata-action@v6
               with:
                   images: ghcr.io/${{ github.repository }}
                   tags: |
-                      type=raw,value=latest
+                      type=raw,value=latest,enable=${{ github.ref_name == 'master' }}
+                      type=ref,event=branch,enable=${{ github.ref_name != 'master' }}
                       type=sha,format=short
 
             # Збірка та завантаження образу в GHCR
