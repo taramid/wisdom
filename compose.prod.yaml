@@ -1,7 +1,7 @@
 services:
   app:
-    image: ghcr.io/user/project:latest
-    container_name: app-1
+    image: ghcr.io/taramid/wisdom:latest
+    container_name: wisdom-app-1
     restart: unless-stopped
 
     ports:
