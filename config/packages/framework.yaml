@@ -8,6 +8,12 @@ framework:
     #esi: true
     #fragments: true
 
+    trusted_proxies: '%env(default::TRUSTED_PROXIES)%'
+    trusted_headers:
+        - 'x-forwarded-for'
+        - 'x-forwarded-proto'
+        - 'x-forwarded-host'
+
 when@test:
     framework:
         test: true

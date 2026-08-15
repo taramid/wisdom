@@ -1,0 +1,14 @@
+services:
+  app:
+    image: ghcr.io/taramid/wisdom:${TAG:-latest}
+    container_name: wisdom-app-1
+    restart: unless-stopped
+
+    ports:
+      - "8001:80"
+
+    env_file:
+      - .env
+
+    environment:
+      - APP_ENV=prod
