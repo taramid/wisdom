@@ -23,14 +23,13 @@ RUN composer dump-autoload --optimize --classmap-authoritative --no-dev
 # .env + .env.prod = .env.local.php
 RUN composer dump-env prod
 
-# frontend
-ENV APP_ENV=prod APP_DEBUG=0 APP_SECRET=build_time_dummy_secret
-RUN php bin/console importmap:install -vvv && \
+# frontend & cache
+ENV APP_ENV=prod APP_DEBUG=0
+RUN export APP_SECRET=dummy && \
+    php bin/console importmap:install -vvv && \
     php bin/console tailwind:build --minify -vvv && \
-    php bin/console asset-map:compile -vvv
-
-# cache
-RUN php bin/console cache:clear && \
+    php bin/console asset-map:compile -vvv && \
+    php bin/console cache:clear && \
     php bin/console cache:warmup
 
 
