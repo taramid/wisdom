@@ -24,8 +24,7 @@ RUN composer dump-autoload --optimize --classmap-authoritative --no-dev
 RUN composer dump-env prod
 
 # frontend & cache
-ENV APP_ENV=prod APP_DEBUG=0
-RUN export APP_SECRET=dummy && \
+RUN export APP_ENV=prod APP_DEBUG=0 APP_SECRET=dummy && \
     php bin/console importmap:install -vvv && \
     php bin/console tailwind:build --minify -vvv && \
     php bin/console asset-map:compile -vvv && \
