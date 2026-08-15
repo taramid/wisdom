@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/taramid/wisdom:latest
+    image: ghcr.io/taramid/wisdom:${TAG:-latest}
     container_name: wisdom-app-1
     restart: unless-stopped
 
