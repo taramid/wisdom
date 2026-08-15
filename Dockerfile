@@ -54,6 +54,7 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" && \
 
 ENV APP_ENV=prod \
     APP_DEBUG=0 \
+    SERVER_NAME=:80 \
     FRANKENPHP_CONFIG="worker /app/public/index.php"
 
 COPY --from=builder /app/bin /app/bin
