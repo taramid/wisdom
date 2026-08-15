@@ -6,6 +6,11 @@ on:
             - deploy2
     workflow_dispatch: # Дозволяє тиснути кнопку "Run workflow" в UI GitHub
 
+# Скасовує попередню збірку, якщо в цю ж гілку прийшов новий пуш
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
 # Автоматично даємо права для завантаження в GHCR без створення ручних токенів
 permissions:
     contents: read
