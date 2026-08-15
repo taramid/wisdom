@@ -20,6 +20,9 @@ COPY . .
 # optimized class autoload
 RUN composer dump-autoload --optimize --classmap-authoritative --no-dev
 
+# .env + .env.prod = .env.local.php
+RUN composer dump-env prod
+
 # frontend
 ENV APP_ENV=prod APP_DEBUG=0 APP_SECRET=build_time_dummy_secret
 RUN php bin/console importmap:install -vvv && \
@@ -61,6 +64,7 @@ COPY --from=builder /app/src /app/src
 COPY --from=builder /app/templates /app/templates
 COPY --from=builder /app/var/cache/prod /app/var/cache/prod
 COPY --from=builder /app/vendor /app/vendor
+COPY --from=builder /app/.env.local.php /app/.env.local.php
 COPY --from=builder /app/composer.json /app/
 
 RUN mkdir -p /app/var/log
