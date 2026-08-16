@@ -57,6 +57,9 @@ jobs:
                   push: true
                   tags: ${{ steps.meta.outputs.tags }}
                   labels: ${{ steps.meta.outputs.labels }}
+                  # Прокидаємо параметри у Dockerfile під час збірки
+                  build-args: |
+                      GIT_HASH=${{ github.sha }}
                   # Ключова фіча: кешування шарів Docker через GitHub Actions (збірка за кілька секунд)
                   cache-from: type=gha
                   cache-to: type=gha,mode=max

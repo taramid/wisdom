@@ -35,8 +35,13 @@
         {% block body %}{% endblock %}
     </main>
 
-    <footer class="bg-white border-t border-slate-200 py-1 sm:py-2 text-center text-sm text-slate-500 overflow-x-clip">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <footer class="relative bg-white border-t border-slate-200 py-1 sm:py-2 text-center text-sm text-slate-500 overflow-x-clip">
+        <div class="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 text-xs font-mono text-slate-300 pointer-events-none select-none z-0">
+            {% if git_hash|length > 22 %}
+                {{ git_hash|slice(0, 7) }}<span class="border-1">{{ git_hash|slice(7, 1) }}</span>
+            {% endif %}
+        </div>
+        <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
             &copy; {{ "now"|date("Y") }} нотатки
         </div>
     </footer>

@@ -3,6 +3,9 @@ twig:
     form_themes:
         - 'tailwind_2_layout.html.twig'
 
+    globals:
+        git_hash: '%env(GIT_HASH)%'
+
 when@test:
     twig:
         strict_variables: true

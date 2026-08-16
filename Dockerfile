@@ -35,6 +35,8 @@ RUN export APP_ENV=prod APP_DEBUG=0 APP_SECRET=dummy && \
 
 FROM dunglas/frankenphp:1-php8.4 AS runtime
 
+ARG GIT_HASH=unknown
+
 WORKDIR /app
 
 RUN install-php-extensions pdo_pgsql intl redis opcache apcu
@@ -52,6 +54,7 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" && \
 ENV APP_ENV=prod \
     APP_DEBUG=0 \
     SERVER_NAME=:80 \
+    GIT_HASH=$GIT_HASH \
     FRANKENPHP_CONFIG="worker /app/public/index.php"
 
 COPY --from=builder /app/bin /app/bin
