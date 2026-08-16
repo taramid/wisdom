@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:postgresql://10.0.0.44:54328/wisdom</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="wisdom@PROD" uuid="0e94b578-fb8f-490d-9f67-4894b58d0247">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://10.0.0.44:54321/wisdom</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
