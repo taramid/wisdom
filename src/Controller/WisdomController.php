@@ -21,7 +21,7 @@ final class WisdomController extends AbstractController
     public function index(WisdomRepository $wisdomRepository): Response
     {
         return $this->render('wisdom/index.html.twig', [
-            'wisdoms' => $wisdomRepository->findAll(),
+            'wisdoms' => $wisdomRepository->findAllOrderedById(),
         ]);
     }
 

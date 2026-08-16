@@ -18,6 +18,17 @@ class WisdomRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return Wisdom[]
+     */
+    public function findAllOrderedById(): array
+    {
+        return $this->createQueryBuilder('w')
+            ->orderBy('w.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * @return Uuid[]
      */
     public function getAllIds(): array
