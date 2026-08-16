@@ -56,13 +56,17 @@ final class WisdomController extends AbstractController
     }
 
     #[Route('/random', name: 'app_wisdom_random')]
-    public function random(WisdomRepository $wisdomRepository, PickerInterface $wisdomPicker): Response
+    public function random(Request $request, WisdomRepository $wisdomRepository, PickerInterface $wisdomPicker): Response
     {
         $randomId = $wisdomPicker->getRandomId();
 
-        return $this->render('wisdom/random.html.twig', [
-            'wisdom' => $randomId ? $wisdomRepository->find($randomId) : null,
-        ]);
+        $wisdom = $randomId ? $wisdomRepository->find($randomId) : null;
+
+        if ($request->headers->has('Turbo-Frame')) {
+            return $this->render('wisdom/_random_frame.html.twig', ['wisdom' => $wisdom]);
+        }
+
+        return $this->render('wisdom/random.html.twig', ['wisdom' => $wisdom]);
     }
 
     #[Route('/{id}', name: 'app_wisdom_show', methods: ['GET'])]

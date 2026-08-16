@@ -9,9 +9,7 @@
 {% block body %}
 
     {% if wisdom is defined and wisdom %}
-        <turbo-frame id="random_wisdom">
-            <twig:Wisdom :wisdom="wisdom" />
-        </turbo-frame>
+        {% include 'wisdom/_random_frame.html.twig' %}
     {% else %}
         <twig:None />
     {% endif %}
