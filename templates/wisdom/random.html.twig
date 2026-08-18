@@ -10,6 +10,10 @@
     {% include('partials/_new_wisdom.html.twig') %}
 {% endblock %}
 
+{% block header_wisdom %}
+    <a href="{{ path('app_wisdom_random') }}" data-turbo-frame="random_wisdom" class="font-bold text-xl text-indigo-600">wisdom</a>
+{% endblock %}
+
 {% block body %}
 
     {% if wisdom is defined and wisdom %}
