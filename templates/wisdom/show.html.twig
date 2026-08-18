@@ -12,6 +12,8 @@
 
         <twig:Wisdom :wisdom="wisdom" />
 
+        <twig:Subject :subject="wisdom.subject" />
+
         {% if is_granted('ROLE_CREATOR') %}
             <div class="flex justify-between">
 
