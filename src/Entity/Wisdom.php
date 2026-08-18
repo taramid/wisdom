@@ -84,4 +84,9 @@ class Wisdom
 
         return $this;
     }
+
+    public function getCreatedAt(): \DateTimeImmutable
+    {
+        return $this->id->getDateTime();
+    }
 }

@@ -4,6 +4,7 @@
             <a href="{{ path('app_wisdom_show', {'id': wisdom.id}) }}">{{ wisdom.title }}</a>
         </h3>
         <pre class="wisdom-body mb-1 whitespace-pre-wrap">{{ wisdom.body | escape | render_code | render_url }}</pre>
+        <pre class="text-xs text-right text-amber-500">{{ wisdom.createdAt | date('Y-m-d') }}</pre>
         {% if wisdom.tags %}
             <hr class="mt-2 border-amber-500">
             <pre class="text-amber-500">{{ wisdom.tags }}</pre>
