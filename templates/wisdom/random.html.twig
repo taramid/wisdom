@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% block meta %}
+    <meta name="turbo-cache-control" content="no-preview">
+{% endblock %}
+
 {% block title %}{{ parent() }} | {{ wisdom.title ?? '-' }}{% endblock %}
 
 {% block header_action %}
