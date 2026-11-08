@@ -11,7 +11,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN install-php-extensions intl redis @composer
 
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --ignore-platform-reqs
+RUN composer config -g process-timeout 2000 && \
+    composer install --no-dev --no-scripts --no-autoloader --prefer-dist --ignore-platform-reqs
 
 # copy it all
 COPY . .
