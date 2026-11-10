@@ -77,8 +77,10 @@ final class SubjectController extends AbstractController
     public function delete(Request $request, Subject $subject, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$subject->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($subject);
-            $entityManager->flush();
+            if ($subject->getWisdoms()->isEmpty()) {
+                $entityManager->remove($subject);
+                $entityManager->flush();
+            }
         }
 
         return $this->redirectToRoute('app_subject_index', [], Response::HTTP_SEE_OTHER);
