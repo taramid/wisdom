@@ -26,7 +26,7 @@ class Subject
      * @var Collection<int, Wisdom>
      */
     #[ORM\OneToMany(targetEntity: Wisdom::class, mappedBy: 'subject', cascade: ['persist'])]
-    #[ORM\OrderBy(['id' => 'ASC'])]
+    #[ORM\OrderBy(['id' => 'DESC'])]
     private Collection $wisdoms;
 
     public function __construct()
